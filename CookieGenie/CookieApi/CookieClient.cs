@@ -68,7 +68,7 @@ namespace CookieGenie.CookieApi
             return cookieDefinitions;
         }
 
-        public async Task GetOrderData()
+        public async Task<List<CookieOrder>> GetOrderData()
         {
             var request = new RestRequest("girl-orders", Method.GET);
             request.AddParameter("details", "full");
@@ -79,7 +79,9 @@ namespace CookieGenie.CookieApi
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ApplicationException("Failed to get order data");
 
-            Console.WriteLine(response.Content);
+            List<CookieOrder> results = JsonConvert.DeserializeObject<List<CookieOrder>>(response.Content);
+
+            return results;
         }
 
         #region IDisposable

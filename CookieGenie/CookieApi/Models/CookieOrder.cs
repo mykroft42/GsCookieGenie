@@ -13,26 +13,53 @@ namespace CookieGenie.CookieApi.Models
         public Contact DeliveryContact { get; set; }
         
         public List<CookieQty> Cookies { get; set; }
-        {
-        "source": "SOCIAL",
-        "type": "GIRLDELIVERY",
-        "paid": true,
-        "id": 407246,
-        "order_number": 407246,
-        "order_date": "2021-01-21T10:09:17.6989509",
-        "last_updated_date": "2021-01-21T10:18:38.5356643",
-        "paid_date": "2021-01-21T10:18:38.5356643",
-        "amount": 48,
-        "packages": 12,
-        "status": "ORDERED",
-        "direct_ship_number": null,
-        "transaction_number": "1233989676",
-        "payment_method": "CreditCard",
-        "payment_method_id": 3,
-        "payment_declined_date": null,
-        "refunded": false,
-        "approved": true,
-        "marked_donation": false
-    },
+
+        public string Source { get; set; } // SOCIAL
+
+        public string Type { get; set; } // GIRLDELIVERY
+
+        public bool Paid { get; set; }
+
+        public int Id { get; set; }
+
+        [JsonProperty("order_number")]
+        public int OrderNumber { get; set; }
+
+        [JsonProperty("order_date")]
+        public DateTime? OrderDate { get; set; }
+        
+        [JsonProperty("last_updated_date")]
+        public DateTime LastUpdatedDate { get; set; }
+
+        [JsonProperty("paid_date")]
+        public DateTime? PaidDate { get; set; }
+
+        public float Amount { get; set; }
+        
+        public int Packages { get; set; }
+        
+        public string Status { get; set; } // "ORDERED",
+        
+        [JsonProperty("direct_ship_number")]
+        public string DirectShipNumber { get; set; }
+
+        [JsonProperty("transaction_number")]
+        public string TransactionNumber { get; set; }
+
+        [JsonProperty("payment_method")]
+        public string PaymentMethod { get; set; } // "CreditCard",
+
+        [JsonProperty("payment_method_id")]
+        public int? PaymentMethodId { get; set; }
+
+        [JsonProperty("payment_declined_date")]
+        public DateTime? PaymentDeclinedDate { get; set; }
+        
+        public bool Refunded { get; set; }
+
+        public bool Approved { get; set; }
+
+        [JsonProperty("marked_donation")]
+        public bool MarkedDonation { get; set; }
     }
 }

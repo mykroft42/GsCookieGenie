@@ -30,15 +30,14 @@ namespace CookieGenie.CookieApi
         private const string LOGIN_URL = @"https://app.abcsmartcookies.com/webapi/api/account/login";
         public async Task Login(string username, string password)
         {
-            var request = new RestRequest("account/login", Method.POST);
+            var request = new RestRequest("account/login", Method.Post);
             request.AddJsonBody(new LoginRequest { Username = username, Password = password });
-            IRestResponse response = await _restClient.ExecuteAsync(request);
-
+            RestResponse response = await _restClient.ExecuteAsync(request);
+            
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ApplicationException($"Failed to login as user: {username} returned status code: {response.StatusCode}");
 
-            _restClient.CookieContainer = new CookieContainer();
-            foreach(RestResponseCookie cookie in response.Cookies)
+            foreach(Cookie cookie in response.Cookies)
             {
                 _restClient.CookieContainer.Add(new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
             }
@@ -48,8 +47,8 @@ namespace CookieGenie.CookieApi
         private readonly string COOKIE_URL = $"{ME_URL}/cookies";
         public async Task<List<CookieDefinition>> GetCookieData()
         {
-            var request = new RestRequest("me", Method.GET);
-            IRestResponse response = await _restClient.ExecuteAsync(request);
+            var request = new RestRequest("me", Method.Get);
+            RestResponse response = await _restClient.ExecuteAsync(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ApplicationException("Failed to load me URL");
@@ -57,7 +56,7 @@ namespace CookieGenie.CookieApi
             JObject obj = JObject.Parse(response.Content);
             GirlId = (int)obj["role"]["girl_id"];
 
-            request = new RestRequest("me/cookies", Method.GET);
+            request = new RestRequest("me/cookies", Method.Get);
             response = await _restClient.ExecuteAsync(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -70,11 +69,11 @@ namespace CookieGenie.CookieApi
 
         public async Task<List<CookieOrder>> GetOrderData()
         {
-            var request = new RestRequest("girl-orders", Method.GET);
+            var request = new RestRequest("girl-orders", Method.Get);
             request.AddParameter("details", "full");
             request.AddParameter("girl_id", GirlId);
 
-            IRestResponse response = await _restClient.ExecuteAsync(request);
+            RestResponse response = await _restClient.ExecuteAsync(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ApplicationException("Failed to get order data");
